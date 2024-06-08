@@ -1,4 +1,4 @@
-local network = require("network")
+local network = require("api.network")
 local config = require("config")
 local log = require("libraries.logger")
 local logger = log.getVisualLogger()
@@ -18,7 +18,7 @@ local channel = 11000
         }
     }
 ]]
-    
+
 local function time(n)
     local h = math.floor(n / 3600)
     local m = math.floor(n / 60) % 60
