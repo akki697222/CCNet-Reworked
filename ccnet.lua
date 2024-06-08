@@ -21,7 +21,7 @@ local function install_base()
     cd("/api")
     wget("https://raw.githubusercontent.com/akki697222/CCNet-Reworked/main/ccnet/api/network.lua")
     cd("/libraries")
-    wget("https://raw.githubusercontent.com/akki697222/CCNet-Reworked/main/ccnet/library/logger.lua")
+    wget("https://raw.githubusercontent.com/akki697222/CCNet-Reworked/main/ccnet/libraries/logger.lua")
     wget("https://github.com/Pyroxenium/Basalt/releases/download/v1.7/basalt.lua")
     cd("/")
 end
