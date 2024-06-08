@@ -1,10 +1,8 @@
 local basalt = require("libraries.basalt")
 local mail = require("mail")
-local json = require("libraries.json")
 local width, height = term.getSize()
 local user = mail.getAddressUser(mail.channel)
 local config = require("config")
-local date = "00/00/00 - 00:00:00"
 local function getCenter(text)
     return width / 2 - (string.len(text) / 2)
 end
