@@ -1,2 +1,2 @@
 # CCNet-Reworked
- Network Library for CC: Tweaked
+ Network Library and applications for CC: Tweaked
