@@ -23,6 +23,9 @@ function mail.getAddressUser(address)
         local event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
         if message.type == "reply" then
             if message.content.reply then
+                if message.content.reply == "notfound" then
+                    return "notfound"
+                end
                 return message.content.reply
             end
         end
@@ -44,6 +47,9 @@ function mail.getMailAddress(address)
         local event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
         if message.type == "reply" then
             if message.content.reply then
+                if message.content.reply == "notfound" then
+                    return "notfound"
+                end
                 return message.content.reply
             end
         end

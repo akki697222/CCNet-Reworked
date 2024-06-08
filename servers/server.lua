@@ -38,6 +38,7 @@ local function core()
                     logger.info("Valid Message")
                     if message.content.require == "server_channel" then
                         logger.info("Required Channel: " .. message.content.server)
+                        local transmited = false
                         for key, value in pairs(channels) do
                             if key == message.content.server then
                                 local payload = {
@@ -49,10 +50,22 @@ local function core()
                                     }
                                 }
                                 network.transmit(channel, message.source, payload)
+                                transmited = true
                                 break
                             end
                         end
                         logger.info("Reply ended")
+                        if not transmited then
+                            local payload = {
+                                type = "reply",
+                                source = channel,
+                                destination = message.source,
+                                content = {
+                                    reply = "notfound"
+                                }
+                            }
+                            network.transmit(channel, message.source, payload)
+                        end
                     elseif message.content.require == "mail_address" then
                         logger.info("Required mail address: " .. message.content.address)
                         local file = fs.open("mail_addresses.json", "r")
@@ -61,6 +74,7 @@ local function core()
                             mail_addresses = {}
                         end
                         file.close()
+                        local transmited = false
                         for key, value in pairs(mail_addresses) do
                             if key == message.content.address then
                                 logger.info("Requested address " .. message.content.address .. " channel is " .. value)
@@ -73,8 +87,21 @@ local function core()
                                     }
                                 }
                                 network.transmit(channel, message.source, payload)
+                                transmited = true
                                 break
                             end
+                        end
+                        logger.info("Reply ended")
+                        if not transmited then
+                            local payload = {
+                                type = "reply",
+                                source = channel,
+                                destination = message.source,
+                                content = {
+                                    reply = "notfound"
+                                }
+                            }
+                            network.transmit(channel, message.source, payload)
                         end
                     elseif message.content.require == "address_user" then
                         logger.info("Required mail address: " .. message.content.address)
@@ -84,6 +111,7 @@ local function core()
                             mail_addresses = {}
                         end
                         file.close()
+                        local transmited = false
                         for key, value in pairs(mail_addresses) do
                             if value == message.content.address then
                                 logger.info("Requested channel " .. message.content.address .. " address is " .. key)
@@ -96,9 +124,22 @@ local function core()
                                     }
                                 }
                                 network.transmit(channel, message.source, payload)
+                                transmited = true
                                 break
                             end
                         end
+                        if not transmited then
+                            local payload = {
+                                type = "reply",
+                                source = channel,
+                                destination = message.source,
+                                content = {
+                                    reply = "notfound"
+                                }
+                            }
+                            network.transmit(channel, message.source, payload)
+                        end
+
                     end
                 else
                     logger.error("Invalid packet received.")
