@@ -12,10 +12,11 @@ local config = {
     },
     server = {
         name = "Server",
+        id = "server_core",
         version = "1.0.0"
     },
     channel = {
-        server = 10000
+        server_core = 10000
     },
     vesions = {
         network = "1.0.0",

@@ -37,8 +37,7 @@ local channelinput = mailwindow:addInput():setPosition(10, height - 1):setSize(w
 --labels
 main:addLabel():setPosition(1, height):setText("User: " .. user):setForeground(config.user.color.text)
 main:addLabel():setPosition(getCenter("Mail"), 1):setText("Mail"):setForeground(config.user.color.text)
-mailwindow:addLabel():setPosition(getCenter("Create Mail"), 1):setText("Create Mail"):setForeground(config.user.color
-.text)
+mailwindow:addLabel():setPosition(getCenter("Mail"), 1):setText("Mail"):setForeground(config.user.color.text)
 --func
 local posY = 2
 local function getMail()
@@ -51,8 +50,8 @@ local function getMail()
                         local subject = message.content.subject
                         local savemail = {}
                         savemail[subject] = message.content
-                        json.dump_v("mails_subject.json", subject)
-                        json.dump("mails.json", savemail)
+                        json.dump_v("/mails_subject.json", subject)
+                        json.dump("/mails.json", savemail)
                         posY = posY + 1
                         mails:addLabel():setText("Mail from " .. message.content.from):setPosition(2, posY)
                         posY = posY + 2
@@ -73,15 +72,21 @@ local function getMail()
 end
 local debug
 local function readMail()
-    local rjsonfile = fs.open("mails.json", "r")
+    local rjsonfile = fs.open("/mails.json", "r")
     local jsonfile = rjsonfile.readAll()
     rjsonfile.close()
-    local rmailsubject = fs.open("mails_subject.json", "r")
+    local rmailsubject = fs.open("/mails_subject.json", "r")
     local mailsubject = rmailsubject.readAll()
     rmailsubject.close()
     if jsonfile ~= nil and mailsubject ~= nil then
         local mailtbl = textutils.unserialiseJSON(jsonfile)
         local mailsubject = textutils.unserialiseJSON(mailsubject)
+        if mailtbl == nil then
+            mailtbl = {}
+        end
+        if mailsubject == nil then
+            mailsubject = {}
+        end
         if mailtbl and mailsubject then
             for k, v in pairs(mailsubject) do
                 --basalt.debug(k .. " " .. v)
@@ -120,7 +125,7 @@ end
 --buttons
 main:addButton():setPosition(width - 6, 1):setSize(6, 1):setText(" EXIT "):setBackground(colors.red):onClick(function()
     os.queueEvent("terminate") end):setForeground(config.user.color.text)
-main:addButton():setPosition(2, 1):setSize(14, 1):setText(" Create Mails "):setBackground(colors.blue):onClick(function()
+main:addButton():setPosition(2, 1):setSize(8, 1):setText(" Create "):setBackground(colors.blue):onClick(function()
     main:hide()
     mailwindow:show()
 end):setForeground(config.user.color.text)
@@ -128,8 +133,18 @@ mailwindow:addButton():setPosition(width - 6, 1):setSize(6, 1):setText(" EXIT ")
     mailwindow:hide()
     main:show()
 end):setForeground(config.user.color.text)
-mailwindow:addButton():setPosition(2, 1):setSize(12, 1):setText(" Send Mails "):setBackground(colors.blue):onClick(
+mailwindow:addButton():setPosition(2, 1):setSize(6, 1):setText(" Send "):setBackground(colors.blue):onClick(
 sendMail):setForeground(config.user.color.text)
 
+if not fs.exists("/mails_subject.json") then
+    local file = fs.open("/mails_subject.json", "w")
+    file.write("{}")
+    file.close()
+end
+if not fs.exists("/mails.json") then
+    local file = fs.open("/mails.json", "w")
+    file.write("{}")
+    file.close()
+end
 readMail()
 parallel.waitForAll(basalt.autoUpdate, getMail)

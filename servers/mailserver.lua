@@ -2,7 +2,7 @@ local network = require("api.network")
 local config = require("config")
 local log = require("libraries.logger")
 local logger = log.getVisualLogger()
-local channel = 11000
+local channel = config.network.channel
 
 --[[
     protocol
@@ -29,10 +29,11 @@ local function time(n)
     return retval
 end
 
-network.init()
-network.open(channel)
 term.clear()
 term.setCursorPos(1,1)
+network.init()
+network.open(channel)
+network.transmit(channel, 10000, {type = "register", source = channel, destination = 10000, register = {type = "server", servername = "mail_server", channel = channel}})
 logger.info("Server Started!")
 ::continue::
 local s, e = pcall(function (...)
@@ -68,4 +69,4 @@ if not s then
     goto continue
 end
 
---modem = peripheral.find("modem") p = {type = "register", source = "10004", destination = "10000", register = {type = "mail_address", address = "akki_debug", "channel" = 10004}} modem.transmit(10000, 10004, p)
+--modem = peripheral.find("modem") p = {type = "register", source = "10003", destination = "10000", register = {type = "mail_address", address = "akki_sub", channel = 10003}} modem.transmit(10000, 10003, p)

@@ -2,12 +2,15 @@ local network = require("api.network")
 local config = require("config")
 local log = require("libraries.logger")
 local logger = log.getVisualLogger()
-local channel = 10000
+local channel = config.network.channel
 local channels = {
-    mail_server = 11000,
-    server = 10000
+    server_core = 10000
 }
-
+if not fs.exists("mail_addresses.json") then
+    local file = fs.open("mail_addresses.json", "w")
+    file.write("{}")
+    file.close()
+end
 network.init()
 network.open(channel)
 term.clear()
@@ -54,6 +57,9 @@ local function core()
                         logger.info("Required mail address: " .. message.content.address)
                         local file = fs.open("mail_addresses.json", "r")
                         local mail_addresses = textutils.unserialiseJSON(file.readAll())
+                        if mail_addresses == nil then
+                            mail_addresses = {}
+                        end
                         file.close()
                         for key, value in pairs(mail_addresses) do
                             if key == message.content.address then
@@ -74,6 +80,9 @@ local function core()
                         logger.info("Required mail address: " .. message.content.address)
                         local file = fs.open("mail_addresses.json", "r")
                         local mail_addresses = textutils.unserialiseJSON(file.readAll())
+                        if mail_addresses == nil then
+                            mail_addresses = {}
+                        end
                         file.close()
                         for key, value in pairs(mail_addresses) do
                             if value == message.content.address then
@@ -109,11 +118,19 @@ local function core()
                             message.register.address .. " to channel " .. message.register.channel)
                             local file = fs.open("mail_addresses.json", "r")
                             local mail_addresses = textutils.unserialiseJSON(file.readAll())
+                            if mail_addresses == nil then
+                                mail_addresses = {}
+                            end
                             file.close()
                             local file = fs.open("mail_addresses.json", "w+")
                             mail_addresses[message.register.address] = message.register.channel
                             file.write(textutils.serialiseJSON(mail_addresses))
                             file.close()
+                        end
+                    elseif message.register.type == "server" then
+                        if message.register.servername and message.register.channel then
+                            logger.info("Registering server "..message.register.servername)
+                            channels[message.register.servername] = message.register.channel
                         end
                     end
                 else
