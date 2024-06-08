@@ -16,7 +16,7 @@ local config = {
         version = "1.0.0"
     },
     channel = {
-        server_core = 10000
+        server = 10000
     },
     vesions = {
         network = "1.0.0",
