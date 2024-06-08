@@ -48,6 +48,9 @@ elseif args[1] == "install" then
         cd("/")
         wget("https://raw.githubusercontent.com/akki697222/CCNet-Reworked/main/mail/mail.lua")
         wget("https://raw.githubusercontent.com/akki697222/CCNet-Reworked/main/mail/mail_app.lua")
+        local file = fs.open(".mailapp", "w")
+        file.write("false")
+        file.close()
         print("Install Complete!")
     elseif args[2] == "server" then
         install_base()
