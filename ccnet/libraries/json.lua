@@ -1,4 +1,3 @@
-local basalt = require("basalt")
 local json = {}
 
 function json.serialize(table)
@@ -29,7 +28,6 @@ function json.dump_v(path, value)
     local table_raw
     local rawfile = fs.open(path, "r")
     if rawfile.readAll() ~= nil then
-        basalt.debug(rawfile.readAll().." "..value)
         table_raw = json.unserialise(rawfile.readAll())
         rawfile.close()
         if table_raw == nil then

@@ -1,5 +1,5 @@
 local modem = peripheral.find("modem") or error("No modem attached.")
-local log = require("logger")
+local log = require("libraries.logger")
 local config = require("config")
 local logger = log.getLogger("/logs/network", "network")
 local commlog = log.getLogger("/logs/network", "comm")

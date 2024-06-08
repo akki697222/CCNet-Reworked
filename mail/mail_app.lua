@@ -1,6 +1,6 @@
-local basalt = require("basalt")
+local basalt = require("libraries.basalt")
 local mail = require("mail")
-local json = require("json")
+local json = require("libraries.json")
 local width, height = term.getSize()
 local user = mail.getAddressUser(mail.channel)
 local config = require("config")

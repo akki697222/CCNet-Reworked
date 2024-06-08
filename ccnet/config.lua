@@ -11,11 +11,17 @@ local config = {
         timeout = 50, --milliseconds
     },
     server = {
-        name = "Core Server",
-        version = "v2.0"
+        name = "Server",
+        version = "1.0.0"
     },
     channel = {
         server = 10000
+    },
+    vesions = {
+        network = "1.0.0",
+        mail = "1.0.0",
+        logger = "0.2.2",
+        json = "1.0.0"
     }
 }
 
