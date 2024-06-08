@@ -2,7 +2,7 @@ local network = require("network")
 local config = require("config")
 local basalt = require("basalt")
 local modem = peripheral.find("modem")
-local channel = config.user.channel
+local channel = config.network.channel
 network.init()
 network.open(channel)
 

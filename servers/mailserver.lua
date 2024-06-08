@@ -21,6 +21,9 @@ local channel = 11000
 
 network.init()
 network.open(channel)
+term.clear()
+term.setCursorPos(1,1)
+logger.info("Server Started!")
 ::continue::
 local s, e = pcall(function (...)
     repeat
@@ -52,4 +55,4 @@ if not s then
     goto continue
 end
 
---modem = peripheral.find("modem") p = {type = "register", source = "10003", destination = "10000", register = {type = "mail_address", address = "akki", "channel" = 10002}} modem.transmit(10000, 10003, p)
+--modem = peripheral.find("modem") p = {type = "register", source = "10004", destination = "10000", register = {type = "mail_address", address = "akki_debug", "channel" = 10004}} modem.transmit(10000, 10004, p)

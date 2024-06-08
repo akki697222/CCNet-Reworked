@@ -1,6 +1,5 @@
 local config = {
     user = {
-        channel = 10001,
         color = {
             main = colors.lightGray,
             sub = colors.gray,
@@ -8,6 +7,7 @@ local config = {
         }
     },
     network = {
+        channel = 10001,
         timeout = 50, --milliseconds
     },
     server = {

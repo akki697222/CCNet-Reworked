@@ -9,6 +9,11 @@ local channels = {
 }
 
 network.init()
+network.open(channel)
+term.clear()
+term.setCursorPos(1,1)
+logger.info("Server Started!")
+
 local function time(n)
     local h = math.floor(n / 3600)
     local m = math.floor(n / 60) % 60
@@ -20,7 +25,6 @@ local function time(n)
 end
 
 local function core()
-    network.open(channel)
     repeat
         local event, side, c, replyChannel, message, distance = os.pullEvent("modem_message")
         logger.info("Received Message")
@@ -127,6 +131,4 @@ if not fs.exists("mail_addresses.json") then
     file.close()
 end
 
-term.clear()
-term.setCursorPos(1,1)
 core()

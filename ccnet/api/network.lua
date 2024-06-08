@@ -3,7 +3,7 @@ local log = require("logger")
 local config = require("config")
 local logger = log.getLogger("/logs/network", "network")
 local commlog = log.getLogger("/logs/network", "comm")
-local counter = 0 
+local counter = 0
 local timeout = config.network.timeout
 local timeouted = false
 
@@ -36,30 +36,32 @@ function network.init()
     logger.init()
     commlog.init()
     logger.info("Logger initialized")
-    logger.info("Sending ping to server...")
-    local randomnumber = math.random(65533)
-    network.open(randomnumber)
-    local ping = network.ping(randomnumber, config.channel.server)
-    if ping == "timeout" then
-        logger.error("Can't connect to server.")
-        print("Can't connect to server.")
-    else
-        logger.info("ping "..ping.."ms")
+    if config.network.channel ~= 10000 then
+        logger.info("Sending ping to server...")
+        local randomnumber = math.random(65533)
+        network.open(randomnumber)
+        local ping = network.ping(randomnumber, config.channel.server)
+        if ping == "timeout" then
+            logger.error("Can't connect to server.")
+            print("Can't connect to server.")
+        else
+            logger.info("ping " .. ping .. "ms")
+        end
+        network.closeAll()
     end
-    network.closeAll()
 end
 
 function network.getServerChannel(server)
     local payload = {
         type = "require",
-        source = config.user.channel,
+        source = config.network.channel,
         destination = config.channel.server,
         content = {
             require = "server_channel",
             server = server
         }
     }
-    network.transmit(config.user.channel, config.channel.server, payload)
+    network.transmit(config.network.channel, config.channel.server, payload)
     repeat
         local event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
         if message.type == "reply" then
@@ -71,19 +73,19 @@ function network.getServerChannel(server)
 end
 
 function network.open(channel)
-    logger.info("Opening channel "..channel.."...")
+    logger.info("Opening channel " .. channel .. "...")
     local s, e = pcall(function() modem.open(channel) end)
     if not s then
         logger.fatal("Error occurred in opening channel", e)
     else
-        logger.info("Successfully opened channel "..channel..".")
+        logger.info("Successfully opened channel " .. channel .. ".")
     end
 end
 
 function network.close(channel)
-    logger.info("Closing channel "..channel.."...")
+    logger.info("Closing channel " .. channel .. "...")
     modem.close(channel)
-    logger.info("Closed channel "..channel..".")
+    logger.info("Closed channel " .. channel .. ".")
 end
 
 function network.transmit(src, dest, payload)
